@@ -84,8 +84,19 @@ This project demonstrated the application of computational statistics methods in
 
 ## Files in this project:
 - `statsproject.Rmd`: The .Rmd file.
-- `StatsProject.pdf`: The knitted pdf.
-- 
+- `statsproject.pdf`: The knitted pdf.
+- `bodyfat.csv`: Body fat dataset.
+
+---
+
+## How to Use
+
+1. **Download the Dataset**  
+   - Download the BodyFat dataset.
+   - Save the file (e.g., `BodyFat.csv`) in the folder where your `.Rmd` file is located.
+
+2. **Set the Correct Path in the Code**  
+   - In the R Markdown file (`statsproject.Rmd`), make sure the path in your `read.csv()` command matches the location of the dataset on your computer.
 
 
  
