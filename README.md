@@ -80,5 +80,12 @@ This project demonstrated the application of computational statistics methods in
 - R and RStudio  
 - Libraries: `ggplot2`, `dplyr`, `MASS`, `stats`, `FactoMineR`, `factoextra`
 
+---
+
+## Files in this project:
+- `statsproject.Rmd`: The .Rmd file.
+- `StatsProject.pdf`: The knitted pdf.
+- 
+
 
  
