@@ -1,0 +1,166 @@
+---
+title: "Untitled"
+author: "Mannat Ahuja"
+date: "2024-09-28"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Section 2
+## Loading the dataset
+#```{r}
+#student <- read.csv("H:/R Files/StudentPerformanceFactors.csv")
+#summary(student)
+#```
+
+## Use at home
+```{r}
+student <- read.csv("C:/Users/Uni/Downloads/StudentPerformanceFactors.csv")
+```
+
+
+
+```{r}
+# Create a histogram
+hist(student$Physical_Activity, 
+     breaks = 50,
+     main = "Histogram of Physical Activity",  # Title of the histogram
+     xlab = "Weekly Physical Activity in hours",            # Label for the X-axis
+     ylab = "Frequency",               # Label for the Y-axis
+     col = "skyblue",                  # Color for the bars
+     border = "black")                 # Color for the bar borders
+```
+
+
+## Method of Moments Estimations
+### Poisson Distribution
+```{r}
+# Method of moments estimator for Poisson distribution (lambda)
+lambda_hat <- mean(student$Physical_Activity)
+cat("First moment(mean) =", lambda_hat, "\n")
+```
+```{r}
+# Set lambda to 2.9
+lambda <- 2.96761
+
+# Define the possible number of hours worked out per week (0 to 6 hours)
+x_values <- 0:6
+
+# Calculate Poisson probabilities for each value
+poisson_probabilities <- dpois(x_values, lambda)
+
+# Plot the Poisson PMF
+barplot(poisson_probabilities, names.arg = x_values, 
+        col = "lightblue", 
+        main = paste("Poisson Distribution (lambda =", lambda, ")"),
+        xlab = "Weekly Physical Activity (hours)", 
+        ylab = "Probability")
+
+# Add grid for better readability
+grid()
+```
+```{r}
+# Set lambda to 2.9
+lambda <- 2.96761
+
+# Define the range of values (0 to 10 hours, for smooth curve)
+x_values <- 0:6
+
+# Calculate Poisson probabilities for each value
+poisson_probabilities <- dpois(x_values, lambda)
+
+# Plot the Poisson distribution curve
+plot(x_values, poisson_probabilities, type = "o", col = "blue", 
+     main = paste("Poisson Distribution (lambda =", lambda, ")"),
+     xlab = "Weekly Physical Activity (hours)", 
+     ylab = "Probability", 
+     lwd = 2)
+
+# Optionally, add a grid for readability
+grid()
+```
+
+
+### Multinomial Distribution
+```{r}
+# Create a frequency table (counts of each category)
+category_counts <- table(student$Physical_Activity)
+
+# Method of moments estimators for Multinomial (proportions of each category)
+p_hat <- category_counts / sum(category_counts)
+
+cat("Method of moments estimators for Multinomial (proportions of each category) =", p_hat, "\n")
+```
+
+
+## Maximum Likelihood Estimators
+### Poisson Distribution
+```{r}
+# MLE for Poisson distribution (lambda)
+lambda_hat_mle <- mean(student$Physical_Activity)
+
+cat("MLE Estimate for Poisson Distribution =", lambda_hat_mle, "\n")
+```
+### Multinomial Distribution
+```{r}
+# Calculate the frequency of each category
+category_counts <- table(student$Physical_Activity)
+
+# MLE for Multinomial distribution (proportions of each category)
+p_hat_mle <- category_counts / sum(category_counts)
+
+cat("MLE for Multinomial (proportions of each category) =", p_hat_mle, "\n")
+```
+
+### Using the formula FOr POISSON
+```{r}
+# Sample data (replace 'student$Physical_Activity' with your actual dataset)
+x <- student$Physical_Activity
+
+# Define the log-likelihood function for Poisson distribution
+loglike <- function(lambda) {
+  n = length(x)
+  ll = -n * lambda + sum(x) * log(lambda) - sum(lfactorial(x))  # Use lfactorial to avoid overflow
+  return(-ll)  # Return the negative log-likelihood since optim minimizes
+}
+
+# Use optimize function to find the maximum likelihood estimator (MLE)
+result <- optimize(loglike, interval = c(0.01, 100), maximum = FALSE)
+
+# Print the MLE for lambda
+print(result$minimum)
+```
+
+
+
+
+
+## Linear Regression
+### Converting categorical variables
+```{r}
+student$Gender <- as.factor(student$Gender)
+student$Internet_Access <- as.factor(student$Internet_Access)
+```
+
+### Fitting a Linear Regression Model
+```{r}
+# Fit the linear model
+lm_model <- lm(Exam_Score ~ Sleep_Hours + Gender + Hours_Studied + Physical_Activity, data = student)
+
+# Summary of the model
+summary(lm_model)
+```
+### Checking the fit
+```{r}
+# Diagnostic plots
+par(mfrow = c(2, 2))  # Set up a 2x2 plotting area
+plot(lm_model)        # Create diagnostic plots
+```
+
+
+
+
